@@ -165,19 +165,14 @@
               {% if produto_hero %}
               <div class="hero-visual hero-visual-product">
                 <div class="hero-editorial-card" onclick="openProduct({{ produto_hero.id }})" role="button" tabindex="0" aria-label="Ver {{ produto_hero.nome }}">
-                  <div class="hero-editorial-tag">Campanha Editorial</div>
+                  
                   <div class="hero-photo-frame">
                     {% if imagem_hero.imagem %}
                     <img src="{{ imagem_hero.imagem.url }}" alt="{{ produto_hero.nome }}">
                     {% endif %}
                   </div>
 
-                  {% if imagens_hero|length > 1 %}
-                  <div class="hero-stamp-preview" title="Destaque da estampa">
-                    <img src="{{ imagens_hero.1.imagem.url }}" alt="Estampa {{ produto_hero.nome }}">
-                    <span class="hero-stamp-label">Estampa</span>
-                  </div>
-                  {% endif %}
+                
 
                   <div class="caption">
                     <div class="caption-info">
