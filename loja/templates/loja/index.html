@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n l10n %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -74,8 +74,10 @@
   </div>
 
   <!-- Main Views -->
+  <main id="app">
+
   <!-- View: Home -->
-  <main class="view active" id="view-home">
+  <section class="view active" id="view-home">
     <section class="hero hero-carousel" id="hero-carousel" aria-label="Carrossel Principal VEREDAS">
       <!-- Elemento decorativo de fundo: Sol -->
       <img src="{% static 'simbolos/sol.png' %}" alt="" class="bg-symbol bg-symbol-hero" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/sol.png';">
@@ -151,11 +153,11 @@
                   <span><i class="fa-solid fa-check"></i> Estampa autoral com raízes</span>
                 </div>
                 <div class="actions">
-                  <button class="primary" onclick="{% if produto_hero.colecao %}openCollection('{{ produto_hero.colecao.slug|escapejs }}'){% elif colecoes %}openCollection('{{ colecoes.0.slug|escapejs }}'){% else %}navigate('collections'){% endif %}">
+                  <button class="primary" data-collection="{% if produto_hero.colecao %}{{ produto_hero.colecao.slug }}{% elif colecoes %}{{ colecoes.0.slug }}{% endif %}" onclick="this.dataset.collection ? openCollection(this.dataset.collection) : navigate('collections')">
                     EXPLORAR COLEÇÃO <i class="fa-solid fa-arrow-right"></i>
                   </button>
                   {% if produto_hero %}
-                  <button class="secondary" onclick="openProduct({{ produto_hero.id }})">
+                  <button class="secondary" data-product-id="{{ produto_hero.id|unlocalize }}" onclick="openProduct(Number(this.dataset.productId))">
                     Ver camisa
                   </button>
                   {% endif %}
@@ -164,15 +166,12 @@
 
               {% if produto_hero %}
               <div class="hero-visual hero-visual-product">
-                <div class="hero-editorial-card" onclick="openProduct({{ produto_hero.id }})" role="button" tabindex="0" aria-label="Ver {{ produto_hero.nome }}">
-                  
+                <div class="hero-editorial-card" data-product-id="{{ produto_hero.id|unlocalize }}" onclick="openProduct(Number(this.dataset.productId))" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }" role="button" tabindex="0" aria-label="Ver {{ produto_hero.nome }}">
                   <div class="hero-photo-frame">
                     {% if imagem_hero.imagem %}
                     <img src="{{ imagem_hero.imagem.url }}" alt="{{ produto_hero.nome }}">
                     {% endif %}
                   </div>
-
-                
 
                   <div class="caption">
                     <div class="caption-info">
@@ -245,10 +244,10 @@
         </div>
       </div>
     </section>
-  </main>
+  </section>
 
   <!-- View: Shop -->
-  <main class="view shop" id="view-shop">
+  <section class="view shop" id="view-shop">
     <div class="container">
       <div class="page-head">
         <div>
@@ -260,10 +259,10 @@
       <div class="filters hidden" id="filters"></div>
       <div class="product-grid" id="shop-grid"></div>
     </div>
-  </main>
+  </section>
 
   <!-- View: Collections -->
-  <main class="view collections" id="view-collections">
+  <section class="view collections" id="view-collections">
     <div class="container">
       <div class="page-head">
         <div>
@@ -287,10 +286,10 @@
       </article>
       {% endfor %}
     </div>
-  </main>
+  </section>
 
   <!-- View: About -->
-  <main class="view about" id="view-about">
+  <section class="view about" id="view-about">
     <div class="container about-grid">
       <div>
         <p class="eyebrow">A VEREDAS</p>
@@ -302,10 +301,10 @@
         <p>A marca começa pequena, mas a experiência da loja foi estruturada para crescer junto com novas peças, categorias e coleções.</p>
       </div>
     </div>
-  </main>
+  </section>
 
   <!-- View: Product Details -->
-  <main class="view product-page" id="view-product">
+  <section class="view product-page" id="view-product">
     <div class="container product-layout">
       <div>
         <div class="gallery-main">
@@ -331,10 +330,10 @@
         <button class="add" onclick="addToCart()">Adicionar à sacola</button>
       </div>
     </div>
-  </main>
+  </section>
 
   <!-- View: Cart -->
-  <main class="view cart-page" id="view-cart">
+  <section class="view cart-page" id="view-cart">
     <div class="container">
       <div class="page-head">
         <div>
@@ -345,6 +344,8 @@
       </div>
       <div id="cart-content"></div>
     </div>
+  </section>
+
   </main>
 
   <!-- Footer -->
@@ -365,6 +366,7 @@
   <div class="toast" id="toast"></div>
 
 <script id="products-data" type="application/json">
+{% localize off %}
 [
     {% for produto in produtos %}
     {
@@ -390,18 +392,19 @@
 
         "sizes": [
             {% for variacao in produto.variacoes.all %}
-            "{{ variacao.tamanho }}"{% if not forloop.last %},{% endif %}
+            "{{ variacao.tamanho|escapejs }}"{% if not forloop.last %},{% endif %}
             {% endfor %}
         ],
 
         "stock": {
             {% for variacao in produto.variacoes.all %}
-            "{{ variacao.tamanho }}": {{ variacao.estoque }}{% if not forloop.last %},{% endif %}
+            "{{ variacao.tamanho|escapejs }}": {{ variacao.estoque }}{% if not forloop.last %},{% endif %}
             {% endfor %}
         }
     }{% if not forloop.last %},{% endif %}
     {% endfor %}
 ]
+{% endlocalize %}
 </script>
 
   <!-- Lógica da aplicação -->
