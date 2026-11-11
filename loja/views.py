@@ -21,8 +21,9 @@ def home(request):
         'colecao'
     ).order_by('ordem', 'id')
 
-    produto_hero = produtos.filter(destaque=True).first()
-    imagem_hero = next(iter(produto_hero.imagens.all()), None) if produto_hero else None
+    produto_hero = produtos.filter(destaque=True).first() or produtos.first()
+    imagens_hero = list(produto_hero.imagens.all()) if produto_hero else []
+    imagem_hero = imagens_hero[0] if imagens_hero else None
 
     return render(
         request,
@@ -32,6 +33,7 @@ def home(request):
             'colecoes': Colecao.objects.order_by('ordem', 'id'),
             'produto_hero': produto_hero,
             'imagem_hero': imagem_hero,
+            'imagens_hero': imagens_hero,
         }
     )
 

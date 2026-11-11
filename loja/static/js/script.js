@@ -358,10 +358,126 @@ function backdropClose(e) {
   if (e.target.id === 'mobile-menu') closeMenu();
 }
 
+// ==========================================
+// HERO CAROUSEL SYSTEM
+// ==========================================
+let currentHeroSlide = 0;
+const totalHeroSlides = 2;
+let heroAutoplayTimer = null;
+const HERO_AUTOPLAY_INTERVAL = 6500;
+
+function updateHeroCarousel() {
+  const track = document.getElementById('hero-track');
+  if (!track) return;
+
+  track.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+
+  const slides = document.querySelectorAll('.hero-slide');
+  slides.forEach((slide, idx) => {
+    const isActive = idx === currentHeroSlide;
+    slide.classList.toggle('active', isActive);
+    slide.setAttribute('aria-hidden', (!isActive).toString());
+  });
+
+  const dots = document.querySelectorAll('.hero-dot');
+  dots.forEach((dot, idx) => {
+    const isActive = idx === currentHeroSlide;
+    dot.classList.toggle('active', isActive);
+    dot.setAttribute('aria-selected', isActive.toString());
+  });
+}
+
+function goToHeroSlide(index) {
+  if (index < 0 || index >= totalHeroSlides) return;
+  currentHeroSlide = index;
+  updateHeroCarousel();
+  resetHeroAutoplay();
+}
+
+function nextHeroSlide() {
+  currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
+  updateHeroCarousel();
+  resetHeroAutoplay();
+}
+
+function prevHeroSlide() {
+  currentHeroSlide = (currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides;
+  updateHeroCarousel();
+  resetHeroAutoplay();
+}
+
+function startHeroAutoplay() {
+  stopHeroAutoplay();
+  heroAutoplayTimer = setInterval(() => {
+    currentHeroSlide = (currentHeroSlide + 1) % totalHeroSlides;
+    updateHeroCarousel();
+  }, HERO_AUTOPLAY_INTERVAL);
+}
+
+function stopHeroAutoplay() {
+  if (heroAutoplayTimer) {
+    clearInterval(heroAutoplayTimer);
+    heroAutoplayTimer = null;
+  }
+}
+
+function resetHeroAutoplay() {
+  stopHeroAutoplay();
+  startHeroAutoplay();
+}
+
+function initHeroCarousel() {
+  const carousel = document.getElementById('hero-carousel');
+  if (!carousel) return;
+
+  updateHeroCarousel();
+  startHeroAutoplay();
+
+  carousel.addEventListener('mouseenter', stopHeroAutoplay);
+  carousel.addEventListener('mouseleave', startHeroAutoplay);
+  carousel.addEventListener('focusin', stopHeroAutoplay);
+  carousel.addEventListener('focusout', startHeroAutoplay);
+
+  carousel.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      prevHeroSlide();
+    } else if (e.key === 'ArrowRight') {
+      nextHeroSlide();
+    }
+  });
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  carousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+    stopHeroAutoplay();
+  }, { passive: true });
+
+  carousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX < 0) {
+        nextHeroSlide();
+      } else {
+        prevHeroSlide();
+      }
+    }
+    startHeroAutoplay();
+  }, { passive: true });
+}
+
 // Initialization
 renderHome();
 renderShop();
 updateCartCount();
+initHeroCarousel();
 
 const initialRoute = location.hash.replace('#', '');
 if (['home', 'shop', 'collections', 'about', 'cart'].includes(initialRoute)) {

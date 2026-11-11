@@ -21,7 +21,9 @@
   <header>
     <div class="container header-inner">
       <a class="brand" href="#" onclick="navigate('home'); return false;">
-        <span class="brand-mark">Ψ</span>
+        <span class="brand-mark">
+          <img src="{% static 'img/logo.png' %}" alt="VEREDAS" onerror="this.onerror=null; this.src='/media/logo/logo_sem_fundo.png';">
+        </span>
         <span>
           <span class="brand-name">VEREDAS</span>
           <span class="brand-sub">Caminhos que Vestem</span>
@@ -52,7 +54,12 @@
   <div class="mobile-menu" id="mobile-menu" onclick="backdropClose(event)">
     <div class="mobile-panel">
       <div class="mobile-top">
-        <strong class="brand-name">VEREDAS</strong>
+        <a class="brand" href="#" onclick="navigate('home'); closeMenu(); return false;">
+          <span class="brand-mark">
+            <img src="{% static 'img/logo.png' %}" alt="VEREDAS" onerror="this.onerror=null; this.src='/media/logo/logo_sem_fundo.png';">
+          </span>
+          <strong class="brand-name">VEREDAS</strong>
+        </a>
         <button class="close-menu" onclick="closeMenu()">
           <i class="fa-solid fa-xmark"></i>
         </button>
@@ -69,38 +76,154 @@
   <!-- Main Views -->
   <!-- View: Home -->
   <main class="view active" id="view-home">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          {% if produto_hero.colecao %}
-          <p class="eyebrow">{{ produto_hero.colecao.nome }}</p>
-          {% endif %}
-          <h1 class="hero-title">FÉ, ORIGEM<br>E <span>IDENTIDADE.</span></h1>
-          <p class="hero-text">Moda autoral criada a partir da cultura nordestina, da fé e de uma estética pensada para durar além de uma coleção.</p>
-          <div class="actions">
-            <button class="primary" onclick="navigate('shop')">
-              Ir para a loja <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="secondary" onclick="navigate('collections')">Conhecer a coleção</button>
-          </div>
+    <section class="hero hero-carousel" id="hero-carousel" aria-label="Carrossel Principal VEREDAS">
+      <!-- Elemento decorativo de fundo: Sol -->
+      <img src="{% static 'simbolos/sol.png' %}" alt="" class="bg-symbol bg-symbol-hero" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/sol.png';">
+      <div class="hero-slider-wrapper">
+        <div class="hero-slides-track" id="hero-track">
+
+          <!-- SLIDE 1: Apresentação da Marca -->
+          <article class="hero-slide" data-slide="0" aria-label="Slide 1 de 2: Apresentação da Marca">
+            <div class="container hero-grid">
+              <div class="hero-content">
+                <p class="eyebrow"><img src="{% static 'img/logo.png' %}" alt="" class="eyebrow-logo" onerror="this.onerror=null; this.src='/media/logo/logo_sem_fundo.png';"> VEREDAS · MANIFESTO</p>
+                <h1 class="hero-title">MAIS QUE ROUPAS,<br>HISTÓRIAS QUE <span>VESTIMOS.</span></h1>
+                <p class="hero-text">A VEREDAS nasce do encontro entre a fé, a cultura nordestina e o design atemporal. Criamos peças que carregam história, propósito e identidade, valorizando nossas raízes e tudo aquilo que nos representa.</p>
+                <div class="hero-quote-box">
+                  <div class="hero-quote-accent"></div>
+                  <p class="hero-quote-text">“Vestir Veredas é carregar sua origem com orgulho.”</p>
+                </div>
+                <div class="actions">
+                  <button class="primary" onclick="navigate('about')">
+                    CONHECER A VEREDAS <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <button class="secondary" onclick="navigate('shop')">
+                    Explorar Loja
+                  </button>
+                </div>
+              </div>
+              <div class="hero-visual hero-visual-brand">
+                <div class="hero-brand-card">
+                  {% if colecoes.0.imagem %}
+                  <div class="hero-brand-photo">
+                    <img src="{{ colecoes.0.imagem.url }}" alt="{{ colecoes.0.nome }}">
+                    <div class="hero-brand-overlay"></div>
+                  </div>
+                  {% else %}
+                  <div class="hero-brand-photo">
+                    <img src="/media/colecoes/imagem_meio_cortada.png" alt="Coleção VEREDAS">
+                    <div class="hero-brand-overlay"></div>
+                  </div>
+                  {% endif %}
+                  <div class="hero-brand-art">
+                    <div class="hero-emblem-wrap">
+                      <div class="hero-emblem-mark">
+                        <img src="{% static 'img/logo.png' %}" alt="Logo VEREDAS" class="hero-emblem-img" onerror="this.onerror=null; this.src='/media/logo/logo_sem_fundo.png';">
+                      </div>
+                    </div>
+                    <div class="hero-brand-badge">
+                      <span class="badge-tag">DESIGN AUTORAL</span>
+                      <strong class="badge-title">Caminhos que Vestem</strong>
+                      <span class="badge-sub">Feito no Brasil · Raízes do Sertão</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 2: Destaque da Nova Coleção -->
+          <article class="hero-slide" data-slide="1" aria-label="Slide 2 de 2: Destaque da Nova Coleção">
+            <div class="container hero-grid">
+              <div class="hero-content">
+                {% if produto_hero.colecao %}
+                <p class="eyebrow"><i class="fa-solid fa-gem"></i> {{ produto_hero.colecao.nome }}</p>
+                {% elif colecoes %}
+                <p class="eyebrow"><i class="fa-solid fa-gem"></i> {{ colecoes.0.nome }}</p>
+                {% else %}
+                <p class="eyebrow"><i class="fa-solid fa-gem"></i> NOVA COLEÇÃO</p>
+                {% endif %}
+                <h1 class="hero-title">RAÍZES.<br>UMA HISTÓRIA <span>QUE SE VESTE.</span></h1>
+                <p class="hero-text">Uma coleção inspirada na fé, nos símbolos e nas histórias que fazem parte da nossa identidade nordestina.</p>
+                <div class="hero-features-list">
+                  <span><i class="fa-solid fa-check"></i> Algodão premium 230 g/m²</span>
+                  <span><i class="fa-solid fa-check"></i> Modelagem oversized</span>
+                  <span><i class="fa-solid fa-check"></i> Estampa autoral com raízes</span>
+                </div>
+                <div class="actions">
+                  <button class="primary" onclick="{% if produto_hero.colecao %}openCollection('{{ produto_hero.colecao.slug|escapejs }}'){% elif colecoes %}openCollection('{{ colecoes.0.slug|escapejs }}'){% else %}navigate('collections'){% endif %}">
+                    EXPLORAR COLEÇÃO <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  {% if produto_hero %}
+                  <button class="secondary" onclick="openProduct({{ produto_hero.id }})">
+                    Ver camisa
+                  </button>
+                  {% endif %}
+                </div>
+              </div>
+
+              {% if produto_hero %}
+              <div class="hero-visual hero-visual-product">
+                <div class="hero-editorial-card" onclick="openProduct({{ produto_hero.id }})" role="button" tabindex="0" aria-label="Ver {{ produto_hero.nome }}">
+                  <div class="hero-editorial-tag">Campanha Editorial</div>
+                  <div class="hero-photo-frame">
+                    {% if imagem_hero.imagem %}
+                    <img src="{{ imagem_hero.imagem.url }}" alt="{{ produto_hero.nome }}">
+                    {% endif %}
+                  </div>
+
+                  {% if imagens_hero|length > 1 %}
+                  <div class="hero-stamp-preview" title="Destaque da estampa">
+                    <img src="{{ imagens_hero.1.imagem.url }}" alt="Estampa {{ produto_hero.nome }}">
+                    <span class="hero-stamp-label">Estampa</span>
+                  </div>
+                  {% endif %}
+
+                  <div class="caption">
+                    <div class="caption-info">
+                      <strong>{{ produto_hero.nome }}</strong>
+                      <span>{% language "pt-br" %}R$ {{ produto_hero.preco|floatformat:2 }}{% endlanguage %}</span>
+                    </div>
+                    <span class="caption-cta">Ver peça <i class="fa-solid fa-arrow-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </article>
+
         </div>
-        {% if produto_hero %}
-        <div class="hero-photo">
-          <div class="hero-photo-frame">
-            {% if imagem_hero.imagem %}
-            <img src="{{ imagem_hero.imagem.url }}" alt="{{ produto_hero.nome }}">
-            {% endif %}
-          </div>
-          <div class="caption">
-            <strong>{{ produto_hero.nome }}</strong>
-            <span>{% language "pt-br" %}R$ {{ produto_hero.preco|floatformat:2 }}{% endlanguage %}</span>
-          </div>
+      </div>
+
+      <!-- Controles do Carrossel -->
+      <div class="container hero-nav-bar">
+        <div class="hero-dots" role="tablist" aria-label="Navegação de slides">
+          <button class="hero-dot active" role="tab" aria-selected="true" aria-label="Slide 1: A Marca" onclick="goToHeroSlide(0)">
+            <span class="hero-dot-num">01</span>
+            <span class="hero-dot-bar"><span class="hero-dot-fill"></span></span>
+            <span class="hero-dot-text">A Marca</span>
+          </button>
+          <button class="hero-dot" role="tab" aria-selected="false" aria-label="Slide 2: Nova Coleção" onclick="goToHeroSlide(1)">
+            <span class="hero-dot-num">02</span>
+            <span class="hero-dot-bar"><span class="hero-dot-fill"></span></span>
+            <span class="hero-dot-text">Nova Coleção</span>
+          </button>
         </div>
-        {% endif %}
+
+        <div class="hero-arrows">
+          <button class="hero-arrow" aria-label="Slide anterior" onclick="prevHeroSlide()">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="hero-arrow" aria-label="Próximo slide" onclick="nextHeroSlide()">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-products">
+      <!-- Elemento decorativo de fundo: Pássaro -->
+      <img src="{% static 'simbolos/passaro.png' %}" alt="" class="bg-symbol bg-symbol-products" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/passaro.png';">
       <div class="container">
         <div class="section-head">
           <div>
@@ -113,7 +236,9 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-about">
+      <!-- Elemento decorativo de fundo: Cacto -->
+      <img src="{% static 'simbolos/cacto.png' %}" alt="" class="bg-symbol bg-symbol-about" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/cacto.png';">
       <div class="container about-grid">
         <div>
           <p class="eyebrow">A marca</p>
@@ -228,9 +353,14 @@
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer class="site-footer">
+    <!-- Elemento decorativo de fundo: Lua -->
+    <img src="{% static 'simbolos/lua.png' %}" alt="" class="bg-symbol bg-symbol-footer" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/lua.png';">
     <div class="container footer-inner">
-      <span class="footer-brand">VEREDAS®</span>
+      <span class="footer-brand">
+        <img src="{% static 'img/logo.png' %}" alt="Logo VEREDAS" class="footer-logo" onerror="this.onerror=null; this.src='/media/logo/logo_sem_fundo.png';">
+        VEREDAS®
+      </span>
       <span>Caminhos que vestem. Feito no Brasil.</span>
       <span>© 2026 VEREDAS. Todos os direitos reservados.</span>
     </div>
