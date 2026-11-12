@@ -123,3 +123,76 @@ class VariacaoProduto(models.Model):
 
     def __str__(self):
         return f"{self.produto.nome} - {self.tamanho}"
+
+class Pedido(models.Model):
+
+    AGUARDANDO = 'aguardando'
+    CONFIRMADO = 'confirmado'
+    CANCELADO = 'cancelado'
+    STATUS = [
+        (AGUARDANDO, 'Aguardando confirmação'),
+        (CONFIRMADO, 'Confirmado'),
+        (CANCELADO, 'Cancelado'),
+    ]
+
+    status = models.CharField(max_length=20, choices=STATUS, default=AGUARDANDO)
+
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    observacoes = models.TextField(
+        'Observações',
+        blank=True,
+        help_text='Anotações internas: nome da cliente, frete combinado, forma de pagamento etc.',
+    )
+
+    estoque_baixado = models.BooleanField(default=False, editable=False)
+
+    criado_em = models.DateTimeField('Recebido em', auto_now_add=True)
+
+    confirmado_em = models.DateTimeField('Vendido em', null=True, blank=True, editable=False)
+
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-criado_em',)
+
+    def __str__(self):
+        return f'Pedido #{self.pk}'
+
+
+class Venda(Pedido):
+    """Pedidos confirmados, exibidos no admin como relatório de vendas."""
+
+    class Meta:
+        proxy = True
+        ordering = ('-confirmado_em',)
+        verbose_name = 'venda'
+        verbose_name_plural = 'vendas'
+
+
+class ItemPedido(models.Model):
+
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='itens')
+
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='itens_pedido',
+    )
+
+    nome = models.CharField('Produto', max_length=200)
+
+    tamanho = models.CharField(max_length=2, choices=VariacaoProduto.TAMANHOS)
+
+    quantidade = models.PositiveIntegerField()
+
+    preco_unitario = models.DecimalField('Preço unitário (R$)', max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.quantidade}x {self.nome} ({self.tamanho})'
+
+    @property
+    def subtotal(self):
+        return self.preco_unitario * self.quantidade

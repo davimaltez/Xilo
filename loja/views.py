@@ -1,11 +1,13 @@
 import json
 
+from django.conf import settings
+from django.db import transaction
 from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from .models import Produto, VariacaoProduto, ImagemProduto, Colecao
+from .models import Produto, VariacaoProduto, ImagemProduto, Colecao, Pedido, ItemPedido
 
 
 @ensure_csrf_cookie
@@ -34,11 +36,13 @@ def home(request):
             'produto_hero': produto_hero,
             'imagem_hero': imagem_hero,
             'imagens_hero': imagens_hero,
+            'whatsapp_numero': settings.WHATSAPP_NUMERO,
         }
     )
 
 @require_POST
-def validar_estoque(request):
+def criar_pedido(request):
+    """Valida o estoque da sacola e registra o pedido como aguardando confirmação."""
     try:
         dados = json.loads(request.body)
     except (ValueError, UnicodeDecodeError):
@@ -91,4 +95,23 @@ def validar_estoque(request):
                 'quantidade_disponivel': disponivel,
             })
 
-    return JsonResponse({'valido': not erros, 'erros': erros})
+    if erros:
+        return JsonResponse({'valido': False, 'erros': erros})
+
+    with transaction.atomic():
+        pedido = Pedido.objects.create(
+            total=sum(produtos[pid].preco * qtd for (pid, _), qtd in quantidades.items())
+        )
+        ItemPedido.objects.bulk_create([
+            ItemPedido(
+                pedido=pedido,
+                produto=produtos[pid],
+                nome=produtos[pid].nome,
+                tamanho=tamanho,
+                quantidade=qtd,
+                preco_unitario=produtos[pid].preco,
+            )
+            for (pid, tamanho), qtd in quantidades.items()
+        ])
+
+    return JsonResponse({'valido': True, 'pedido': pedido.pk})

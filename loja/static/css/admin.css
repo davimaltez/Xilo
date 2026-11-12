@@ -87,3 +87,140 @@ button:focus-visible {
 .theme-toggle {
     display: none;
 }
+
+/* Pedidos aguardando confirmação, no lugar de "Ações recentes". */
+#pedidos-module h2 {
+    background: #B85C38;
+}
+
+#pedidos-module p {
+    padding: 10px 12px 0;
+    margin: 0;
+}
+
+.pedidos-resumo {
+    font-size: .95rem;
+}
+
+.pedidos-lista {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+}
+
+.pedidos-lista li {
+    border-top: 1px solid var(--hairline-color);
+    padding: 0;
+    margin: 0;
+}
+
+.pedidos-lista a {
+    display: block;
+    padding: 10px 12px;
+    color: var(--body-fg);
+}
+
+.pedidos-lista a:hover {
+    background: var(--darkened-bg);
+}
+
+.pedido-topo {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.pedido-itens {
+    display: block;
+    margin: 3px 0;
+    color: var(--body-quiet-color);
+}
+
+#pedidos-module .pedidos-link {
+    border-top: 1px solid var(--hairline-color);
+    margin-top: 0;
+    padding: 10px 12px;
+    line-height: 1.8;
+}
+
+.pedidos-vazio {
+    color: var(--body-quiet-color);
+    padding-bottom: 12px !important;
+}
+
+/* Relatório de vendas. */
+.vendas-resumo {
+    margin-bottom: 20px;
+}
+
+.vendas-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.vendas-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 14px 16px;
+}
+
+.vendas-card span {
+    display: block;
+    color: var(--body-quiet-color);
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.vendas-card strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 1.5rem;
+    color: var(--body-loud-color);
+}
+
+.vendas-card.destaque {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.vendas-card.destaque span,
+.vendas-card.destaque strong {
+    color: var(--primary-fg);
+}
+
+.vendas-top {
+    margin-top: 12px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+.vendas-top h3 {
+    margin: 0 0 8px;
+    font-size: .9rem;
+}
+
+.vendas-top ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.vendas-top li {
+    padding: 4px 0;
+    list-style: decimal;
+}
+
+.vendas-top li span:last-child {
+    float: right;
+    color: var(--body-quiet-color);
+}
+
+.vendas-nota {
+    margin: 8px 0 0;
+    color: var(--body-quiet-color);
+    font-size: .8rem;
+}

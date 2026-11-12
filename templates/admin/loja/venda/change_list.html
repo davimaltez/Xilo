@@ -1,0 +1,38 @@
+{% extends "admin/change_list.html" %}
+
+{% block result_list %}
+{% if resumo_vendas %}
+<div class="vendas-resumo">
+  <div class="vendas-cards">
+    <div class="vendas-card destaque">
+      <span>Faturamento</span>
+      <strong>R$ {{ resumo_vendas.faturamento|floatformat:"2g" }}</strong>
+    </div>
+    <div class="vendas-card">
+      <span>Vendas</span>
+      <strong>{{ resumo_vendas.quantidade }}</strong>
+    </div>
+    <div class="vendas-card">
+      <span>Peças vendidas</span>
+      <strong>{{ resumo_vendas.pecas }}</strong>
+    </div>
+    <div class="vendas-card">
+      <span>Ticket médio</span>
+      <strong>R$ {{ resumo_vendas.ticket_medio|floatformat:"2g" }}</strong>
+    </div>
+  </div>
+  {% if resumo_vendas.mais_vendidos %}
+  <div class="vendas-top">
+    <h3>Mais vendidos no período</h3>
+    <ol>
+      {% for item in resumo_vendas.mais_vendidos %}
+      <li><span>{{ item.nome }}</span><span>{{ item.pecas }} peça{{ item.pecas|pluralize }} · R$ {{ item.valor|floatformat:"2g" }}</span></li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endif %}
+  <p class="vendas-nota">Os números acompanham o período e os filtros escolhidos. Só entram pedidos confirmados.</p>
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

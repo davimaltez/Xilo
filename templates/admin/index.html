@@ -1,0 +1,41 @@
+{% extends "admin/index.html" %}
+{% load painel %}
+
+{% block sidebar %}
+<div id="content-related">
+  <div class="module" id="pedidos-module">
+    <h2>Pedidos aguardando confirmação</h2>
+    {% if perms.loja.view_pedido %}
+      {% pedidos_aguardando as pendentes %}
+      {% if not pendentes.total %}
+        <p class="pedidos-vazio">Nenhum pedido esperando. Tudo em dia.</p>
+      {% else %}
+        <p class="pedidos-resumo">
+          <strong>{{ pendentes.total }}</strong> pedido{{ pendentes.total|pluralize }} ·
+          R$ {{ pendentes.valor|floatformat:2 }}
+        </p>
+        <ul class="pedidos-lista">
+          {% for pedido in pendentes.lista %}
+          <li>
+            <a href="{% url 'admin:loja_pedido_change' pedido.pk %}">
+              <span class="pedido-topo">
+                <strong>{{ pedido }}</strong>
+                <span>R$ {{ pedido.total|floatformat:2 }}</span>
+              </span>
+              <span class="pedido-itens">{% for item in pedido.itens.all %}{{ item.quantidade }}x {{ item.nome }} ({{ item.tamanho }}){% if not forloop.last %}, {% endif %}{% endfor %}</span>
+              <span class="mini quiet">{{ pedido.criado_em|date:"d/m/Y \à\s H:i" }} · há {{ pedido.criado_em|timesince }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <p class="pedidos-link">
+        <a href="{% url 'admin:loja_pedido_changelist' %}?status__exact=aguardando">Ver pedidos aguardando →</a><br>
+        <a href="{% url 'admin:loja_pedido_changelist' %}">Ver todos os pedidos →</a>
+      </p>
+    {% else %}
+      <p class="pedidos-vazio">Você não tem permissão para ver pedidos.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -283,24 +283,24 @@ function renderCart() {
         </div>
         <div class="summary-row">
           <span>Frete</span>
-          <span>Calculado no checkout</span>
+          <span>A combinar</span>
         </div>
         <div class="summary-row total">
           <span>Total</span>
           <span>${money(total)}</span>
         </div>
-        <button class="checkout" onclick="checkout()">Finalizar pedido</button>
-        <p class="muted" style="font-size: .72rem">O valor do frete é definido na etapa de finalização.</p>
+        <button class="checkout" onclick="checkout()"><i class="fa-brands fa-whatsapp"></i> Finalizar pelo WhatsApp</button>
+        <p class="muted" style="font-size: .72rem">Você será levado ao WhatsApp da loja com o pedido pronto. Frete e pagamento são combinados por lá.</p>
       </aside>
     </div>
   `;
 }
 
-async function validarEstoqueCarrinho() {
+async function registrarPedido() {
   const itens = cart.map(({ id, size, quantity }) => ({ id, size, quantity }));
   try {
     const csrfCookie = document.cookie.split('; ').find(cookie => cookie.startsWith('csrftoken='));
-    const response = await fetch('/api/validar-estoque/', {
+    const response = await fetch('/api/pedidos/', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -311,29 +311,56 @@ async function validarEstoqueCarrinho() {
     });
     const resultado = await response.json();
     if (!response.ok) {
-      toast(resultado.erro || 'Não foi possível validar o estoque. Tente novamente.');
-      return false;
+      toast(resultado.erro || 'Não foi possível registrar o pedido. Tente novamente.');
+      return null;
     }
     if (!resultado.valido) {
       toast(resultado.erros.map(item =>
         `${item.produto} — tamanho ${item.tamanho}: solicitado ${item.quantidade_solicitada}, disponível ${item.quantidade_disponivel}.`
       ).join(' '));
-      return false;
+      return null;
     }
     if (JSON.stringify(itens) !== JSON.stringify(cart.map(({ id, size, quantity }) => ({ id, size, quantity })))) {
-      toast('A sacola foi alterada. Valide o estoque novamente.');
-      return false;
+      toast('A sacola foi alterada. Finalize o pedido novamente.');
+      return null;
     }
-    return true;
+    return resultado.pedido;
   } catch {
-    toast('Não foi possível validar o estoque. Tente novamente.');
-    return false;
+    toast('Não foi possível registrar o pedido. Tente novamente.');
+    return null;
   }
 }
 
+function mensagemPedido(numeroPedido) {
+  const linhas = cart.map(item => {
+    const produto = products.find(p => p.id === item.id);
+    const nome = produto ? produto.name : item.name;
+    const preco = produto ? produto.price : item.price;
+    return `• ${item.quantity}x ${nome} — tamanho ${item.size} — ${money(preco * item.quantity)}`;
+  });
+  const total = cart.reduce((acc, item) => {
+    const produto = products.find(p => p.id === item.id);
+    return acc + (produto ? produto.price : item.price) * item.quantity;
+  }, 0);
+  return [
+    `Olá! Gostaria de fazer este pedido na Veredas (pedido #${numeroPedido}):`,
+    '',
+    ...linhas,
+    '',
+    `Subtotal: ${money(total)}`,
+    'Frete: a combinar',
+  ].join('\n');
+}
+
 async function checkout() {
-  if (!await validarEstoqueCarrinho()) return;
-  alert('Checkout ainda não configurado.');
+  const numeroPedido = await registrarPedido();
+  if (!numeroPedido) return;
+  const numero = JSON.parse(document.getElementById('whatsapp-numero').textContent || '""').replace(/\D/g, '');
+  if (!numero) {
+    toast('WhatsApp da loja não configurado.');
+    return;
+  }
+  window.location.href = `https://wa.me/${numero}?text=${encodeURIComponent(mensagemPedido(numeroPedido))}`;
 }
 
 // UI Feedback

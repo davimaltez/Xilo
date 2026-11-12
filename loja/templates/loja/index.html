@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
 </head>
 <body>
 
@@ -436,6 +436,7 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
+<script id="whatsapp-numero" type="application/json">"{{ whatsapp_numero|escapejs }}"</script>
 <script id="products-data" type="application/json">
 {% localize off %}
 [
@@ -479,6 +480,6 @@
 </script>
 
   <!-- Lógica da aplicação -->
-  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/script.js' %}?v=2"></script>
 </body>
 </html>

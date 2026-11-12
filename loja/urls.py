@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import home, validar_estoque
+from .views import home, criar_pedido
 
 
 urlpatterns = [
     path('', home, name='home'),
-    path('api/validar-estoque/', validar_estoque, name='validar_estoque'),
+    path('api/pedidos/', criar_pedido, name='criar_pedido'),
 ]
