@@ -290,15 +290,86 @@
 
   <!-- View: About -->
   <section class="view about" id="view-about">
-    <div class="container about-grid">
-      <div>
-        <p class="eyebrow">A VEREDAS</p>
-        <h1>Vestir também é carregar origem.</h1>
+    <!-- Abertura -->
+    <div class="about-hero">
+      <img src="{% static 'simbolos/sol.png' %}" alt="" class="bg-symbol bg-symbol-about-hero" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/sol.png';">
+      <div class="container about-grid">
+        <div>
+          <p class="eyebrow">Nossa história</p>
+          <h1>Vestir também é carregar origem.</h1>
+        </div>
+        <div class="about-copy">
+          <p class="about-lede">Toda história tem uma origem e a nossa nasce do encontro entre raízes, memórias e o desejo de levar um pouco da nossa identidade por onde formos.</p>
+          <p>Veredas surgiu do amor pela cultura, pela fé, pela riqueza das nossas tradições e por tudo aquilo que carrega significado. Nasce da vontade de transformar histórias em algo que podemos vestir, valorizando nossas origens sem deixar de olhar para o futuro.</p>
+        </div>
       </div>
-      <div class="about-copy">
-        <p>A VEREDAS é uma marca autoral que nasce do encontro entre fé, cultura nordestina e design atemporal.</p>
-        <p>A proposta é traduzir referências do sertão, da religiosidade popular e da identidade nordestina em peças urbanas, amplas e visualmente limpas.</p>
-        <p>A marca começa pequena, mas a experiência da loja foi estruturada para crescer junto com novas peças, categorias e coleções.</p>
+    </div>
+
+    <!-- Dois olhares -->
+    <div class="about-block">
+      <div class="container">
+        <p class="eyebrow">O encontro</p>
+        <h2 class="section-title">Dois olhares que se encontram</h2>
+        {% get_media_prefix as media_url %}
+        <div class="about-founders">
+          <figure class="founder">
+            <div class="founder-photo">
+              <img src="{{ media_url }}pessoas/maria.png" alt="Maria Xilo" loading="lazy">
+              <span class="founder-num">01</span>
+            </div>
+            <figcaption>
+              <span class="founder-tag">Arte</span>
+              <h3>Maria Xilo</h3>
+              <p class="founder-role">Artista visual pernambucana</p>
+              <p>Traduz em sua arte a força e a beleza da nossa identidade cultural.</p>
+            </figcaption>
+          </figure>
+          <figure class="founder founder--offset">
+            <div class="founder-photo">
+              <img src="{{ media_url }}pessoas/pedro.png" alt="Pedro, criador do Encantos Nordestinos" loading="lazy">
+              <span class="founder-num">02</span>
+            </div>
+            <figcaption>
+              <span class="founder-tag">Comunicação</span>
+              <h3>Pedro</h3>
+              <p class="founder-role">Criador do Encantos Nordestinos</p>
+              <p>Encontrou na comunicação uma forma de valorizar e compartilhar a cultura do Nordeste.</p>
+            </figcaption>
+          </figure>
+        </div>
+        <p class="about-born">Desse encontro nasceu <strong>Veredas</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Inspirações -->
+    <div class="about-block about-inspiration">
+      <img src="{% static 'simbolos/cacto.png' %}" alt="" class="bg-symbol bg-symbol-about" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/cacto.png';">
+      <div class="container about-grid">
+        <div>
+          <p class="eyebrow">Inspiração</p>
+          <h2 class="section-title">Os traços que nos guiam</h2>
+        </div>
+        <div class="about-copy">
+          <ul class="inspiration-list">
+            <li>Xilogravura</li>
+            <li>Fé</li>
+            <li>Arquitetura</li>
+            <li>Paisagens</li>
+            <li>Símbolos nordestinos</li>
+          </ul>
+          <p>Nossa inspiração vem dos traços da xilogravura, da fé, da arquitetura, das paisagens e dos símbolos que fazem parte da vida nordestina. Cada detalhe carrega uma intenção: criar peças que ultrapassem tendências e permaneçam conectadas àquilo que realmente importa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manifesto -->
+    <div class="about-manifesto">
+      <img src="{% static 'simbolos/passaro.png' %}" alt="" class="bg-symbol bg-symbol-manifesto" aria-hidden="true" onerror="this.onerror=null; this.src='/media/simbolos/passaro.png';">
+      <div class="container">
+        <p class="eyebrow">Manifesto</p>
+        <p class="manifesto-intro">Mais do que roupas, queremos criar conexões com nossas raízes, despertar memórias e levar nossa cultura para novos caminhos.</p>
+        <blockquote>Acreditamos na beleza de saber de onde viemos e na liberdade de escolher até onde podemos chegar.</blockquote>
+        <button class="primary" onclick="navigate('shop')">Conheça as peças</button>
       </div>
     </div>
   </section>

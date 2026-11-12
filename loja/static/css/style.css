@@ -1179,6 +1179,201 @@ header {
   letter-spacing: -.055em;
 }
 
+/* --- Página Sobre: blocos --- */
+.about {
+  padding-bottom: 0;
+}
+
+.about-hero,
+.about-block,
+.about-manifesto {
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero .container,
+.about-block .container,
+.about-manifesto .container {
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero {
+  padding: 30px 0 80px;
+  border-bottom: 1px solid rgba(26, 24, 23, .16);
+}
+
+.about-lede {
+  margin-top: 14px;
+  color: var(--sertao) !important;
+  font: 600 clamp(1.15rem, 2vw, 1.4rem)/1.55 var(--sans);
+}
+
+.about-block {
+  padding: 86px 0;
+  border-bottom: 1px solid rgba(26, 24, 23, .16);
+}
+
+.about-founders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 6vw, 80px);
+  max-width: 980px;
+  margin: 50px auto 0;
+}
+
+.founder {
+  margin: 0;
+}
+
+.founder--offset {
+  margin-top: 90px;
+}
+
+.founder-photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  border-radius: 200px 200px 16px 16px;
+  background: var(--caqui);
+  box-shadow: 14px 14px 0 rgba(184, 92, 56, .18);
+}
+
+.founder-photo img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform .6s ease;
+}
+
+.founder:hover .founder-photo img {
+  transform: scale(1.04);
+}
+
+.founder-num {
+  position: absolute;
+  bottom: 16px;
+  left: 18px;
+  color: var(--areia);
+  font: 800 3rem/1 var(--display);
+  letter-spacing: -.05em;
+  text-shadow: 0 2px 14px rgba(26, 24, 23, .35);
+}
+
+.founder figcaption {
+  margin-top: 26px;
+  padding-left: 18px;
+  border-left: 2px solid var(--terracota);
+}
+
+.founder-tag {
+  color: var(--verde);
+  font: 800 .64rem var(--syne);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.founder h3 {
+  margin: 6px 0 4px;
+  font: 800 clamp(1.8rem, 3vw, 2.5rem)/1 var(--display);
+  letter-spacing: -.04em;
+}
+
+.founder-role {
+  margin: 0 0 12px;
+  color: var(--terracota);
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+.founder figcaption p:last-child {
+  margin: 0;
+  color: rgba(26, 24, 23, .68);
+  line-height: 1.75;
+}
+
+.about-born {
+  margin: 44px 0 0;
+  text-align: center;
+  font: 700 clamp(1.3rem, 2.4vw, 1.8rem)/1.3 var(--display);
+  letter-spacing: -.02em;
+}
+
+.about-born strong {
+  color: var(--terracota);
+}
+
+.inspiration-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.inspiration-list li {
+  padding: 9px 16px;
+  border: 1.5px solid rgba(26, 24, 23, .3);
+  border-radius: 999px;
+  font: 800 .68rem var(--syne);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.about-manifesto {
+  padding: 100px 0;
+  background: var(--sertao);
+  color: var(--areia);
+  text-align: center;
+}
+
+.about-manifesto .eyebrow {
+  color: var(--caqui);
+}
+
+.manifesto-intro {
+  max-width: 640px;
+  margin: 22px auto 0;
+  color: rgba(244, 239, 234, .75);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.about-manifesto blockquote {
+  max-width: 900px;
+  margin: 30px auto 40px;
+  font: 800 clamp(1.9rem, 4.2vw, 3.4rem)/1.08 var(--display);
+  letter-spacing: -.045em;
+}
+
+.about-manifesto .primary {
+  border-color: var(--terracota);
+  background: var(--terracota);
+}
+
+.about-manifesto .primary:hover {
+  border-color: var(--areia);
+  background: var(--areia);
+  color: var(--sertao);
+}
+
+.bg-symbol-about-hero {
+  top: 10px;
+  right: 4%;
+  width: clamp(110px, 13vw, 170px);
+  height: auto;
+}
+
+.bg-symbol-manifesto {
+  top: 30px;
+  left: 4%;
+  width: clamp(90px, 11vw, 140px);
+  height: auto;
+  opacity: .1;
+  filter: invert(1);
+}
+
 /* ==========================================
    CART PAGE
    ========================================== */
@@ -1391,6 +1586,12 @@ footer {
   .cart-layout {
     grid-template-columns: 1fr;
   }
+  .about-founders {
+    gap: 24px;
+  }
+  .founder--offset {
+    margin-top: 50px;
+  }
   .hero-visual {
     justify-self: center;
     width: 100%;
@@ -1485,6 +1686,21 @@ footer {
   .product-page,
   .cart-page {
     padding: 40px 0 65px;
+  }
+  .about {
+    padding-bottom: 0;
+  }
+  .about-block,
+  .about-manifesto {
+    padding: 60px 0;
+  }
+  .about-founders {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    max-width: 420px;
+  }
+  .founder--offset {
+    margin-top: 0;
   }
   .cart-item {
     grid-template-columns: 90px 1fr;
